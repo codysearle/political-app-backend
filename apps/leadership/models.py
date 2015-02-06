@@ -10,12 +10,15 @@ class User(models.Model):
         return self.name
 
 
+class Zipcode(models.Model):
+    zip_code = models.CharField(max_length=10)
+
 class Location(models.model):
     number = models.CharField(max_length=25, blank=True)
     street = models.CharField(max_length=100, blank=True)
     city = models.CharField(max_length=30, blank=True)
     state = models.CharField(max_length=12, blank=True)
-    zip_code = models.CharField(max_length=10)
+    zip_code = models.ManyToMany(Zipcode)
 
     def __str__(self):
         return self.name

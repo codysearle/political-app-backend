@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib.auth.hashers import make_password, is_password_usable
 
 
 @receiver(post_save, sender=User)
@@ -11,14 +12,12 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
 
-
-class User(models.Model):
-    name = models.CharField(max_length=100)
-
-
-    def __str__(self):
-        return self.name
-
+@receiver(post_save, sender=User)
+def hash_password(sender, instance=None, created=False, **kwargs):
+   ''' Hashes the password given when a User is created or updated '''
+   if not is_password_usable(instance.password):
+       instance.password = make_password(instance.password)
+       instance.save()
 
 class Zipcode(models.Model):
     zip_code = models.CharField(max_length=10)

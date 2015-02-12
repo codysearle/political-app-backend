@@ -7,4 +7,5 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^api-token-auth/', 'rest_framework.authtoken.views.obtain_auth_token'),
 )
